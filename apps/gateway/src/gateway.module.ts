@@ -3,6 +3,9 @@ import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/user.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -10,6 +13,12 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+
+    // connect our gateway to our mongo users
+    MongooseModule.forRoot(process.env.MONGO_URI_USERS as string),
+
+    AuthModule,
+    UsersModule,
 
     ClientsModule.register([
       {
